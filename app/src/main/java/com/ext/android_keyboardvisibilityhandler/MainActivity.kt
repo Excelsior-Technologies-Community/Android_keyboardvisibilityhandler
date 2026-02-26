@@ -21,19 +21,14 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        keyboardHandler = KeyboardVisibilityHandler(this)
-
-        keyboardHandler.setKeyboardListener(object : KeyboardListener {
-            override fun onKeyboardStateChanged(state: KeyboardState) {
-                when (state) {
-                    KeyboardState.OPEN -> {
-                        Log.d("KeyboardTest", "Keyboard Opened ✅")
-                    }
-                    KeyboardState.CLOSED -> {
-                        Log.d("KeyboardTest", "Keyboard Closed ❌")
-                    }
-                }
+        KeyboardVisibilityHandler.with(this)
+            .onOpen { height ->
+                Log.d("Keyboard", "Opened height: $height")
             }
-        })
+            .onClose {
+                Log.d("Keyboard", "Closed")
+            }
+            .bindToLifecycle(this)
+            .start()
     }
 }
